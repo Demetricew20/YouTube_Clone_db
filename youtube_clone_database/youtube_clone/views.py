@@ -21,3 +21,47 @@ class VideoList(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+class VideoDetail(APIView):
+
+    def get_by_id(self, pk):
+        try:
+            return Video.objects.get(pk=pk)
+        except Video.DoesNotExist:
+            raise status.HTTP_400_BAD_REQUEST
+
+    def get(self, request, pk):
+        song = self.get_by_id(pk)
+        serializer = VideoSerializer(song)
+        return Response(serializer.data)
+
+
+    def put(self, request, pk):
+        video = self.get_by_id(pk)
+        serializer = VideoSerializer(video, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, pk):
+        video = self.get_by_id(pk)
+        video.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+    def patch(self, request, pk):
+        video = self.get_by_id(pk)
+        serializer = VideoSerializer(video, data=request.data, partial=True)
+        if serializer.is_valid():
+            video.likes += 1
+            serializer.save()
+            return Response(status=status.HTTP_202_ACCEPTED),
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+
+    def dislike_video(self, request, pk):
+        video = self.get_by_id(pk)
+        serializer = VideoSerializer(video, data=request.data, partial=True)
+        if serializer.is_valid():
+            video.likes -= 1
+            serializer.save()
+            return Response(status=status.HTTP_202_ACCEPTED)
+        return Response(status=status.HTTP_400_BAD_REQUEST)
