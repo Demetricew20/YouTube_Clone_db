@@ -30,8 +30,8 @@ class VideoDetail(APIView):
             raise status.HTTP_400_BAD_REQUEST
 
     def get(self, request, pk):
-        song = self.get_by_id(pk)
-        serializer = VideoSerializer(song)
+        video = self.get_by_id(pk)
+        serializer = VideoSerializer(video)
         return Response(serializer.data)
 
 

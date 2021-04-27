@@ -7,11 +7,11 @@ from rest_framework.response import Response
 from rest_framework import status
 
 # Create your views here.
-class VideoList(APIView):
+class CommentsList(APIView):
 
     def get(self, request):
-        video = Comments.objects.all()
-        serializer = CommentsSerializer(video, many=True)
+        comment = Comments.objects.all()
+        serializer = CommentsSerializer(comment, many=True)
         return Response(serializer.data)
 
     def post(self, request):
@@ -21,7 +21,7 @@ class VideoList(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-class VideoDetail(APIView):
+class CommentsDetail(APIView):
 
     def get_by_id(self, pk):
         try:
@@ -30,8 +30,8 @@ class VideoDetail(APIView):
             raise status.HTTP_400_BAD_REQUEST
 
     def get(self, request, pk):
-        song = self.get_by_id(pk)
-        serializer = CommentsSerializer(song)
+        comment = self.get_by_id(pk)
+        serializer = CommentsSerializer(comment)
         return Response(serializer.data)
 
 

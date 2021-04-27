@@ -5,4 +5,4 @@ from .models import Video
 class VideoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Video
-        fields = ['id', 'comments', 'likes']
+        fields = ['yt_video_id', 'title', 'likes', 'dislikes']
