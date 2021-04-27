@@ -3,6 +3,6 @@ from . import views
 
 
 urlpatterns = [
-    path('comments', views.CommentsList.as_view()),
-    path('comments/<int:pk>', views.CommentsDetail.as_view())
+    path('comments', views.CommentList.as_view()),
+    path('comments/<int:pk>', views.CommentDetail.as_view())
 ]

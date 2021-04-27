@@ -1,8 +1,8 @@
 from rest_framework import serializers
-from .models import Comments
+from .models import Comment
 
 
-class CommentsSerializer(serializers.ModelSerializer):
+class CommentSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Comments
-        fields = ['video_id', 'comment', 'like', 'dislike']
+        model = Comment
+        fields = ['video', 'comment_text', 'original_comment', 'like', 'dislike']

@@ -1,43 +1,44 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from .models import Comments
-from .serializers import CommentsSerializer
+from django.http import Http404
+from .models import Comment
+from .serializers import CommentSerializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 
 # Create your views here.
-class CommentsList(APIView):
+class CommentList(APIView):
 
     def get(self, request):
-        comment = Comments.objects.all()
-        serializer = CommentsSerializer(comment, many=True)
+        comment = Comment.objects.all()
+        serializer = CommentSerializer(comment, many=True)
         return Response(serializer.data)
 
     def post(self, request):
-        serializer = CommentsSerializer(data=request.data)
+        serializer = CommentSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-class CommentsDetail(APIView):
+class CommentDetail(APIView):
 
     def get_by_id(self, pk):
         try:
-            return Comments.objects.get(pk=pk)
-        except Comments.DoesNotExist:
-            raise status.HTTP_400_BAD_REQUEST
+            return Comment.objects.get(pk=pk)
+        except Comment.DoesNotExist:
+            raise Http404
 
     def get(self, request, pk):
         comment = self.get_by_id(pk)
-        serializer = CommentsSerializer(comment)
+        serializer = CommentSerializer(comment)
         return Response(serializer.data)
 
 
     def put(self, request, pk):
         comment = self.get_by_id(pk)
-        serializer = CommentsSerializer(comment, data=request.data)
+        serializer = CommentSerializer(comment, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
@@ -50,7 +51,7 @@ class CommentsDetail(APIView):
 
     def patch(self, request, pk):
         video = self.get_by_id(pk)
-        serializer = CommentsSerializer(video, data=request.data, partial=True)
+        serializer = CommentSerializer(video, data=request.data, partial=True)
         if serializer.is_valid():
             video.likes += 1
             serializer.save()
@@ -59,7 +60,7 @@ class CommentsDetail(APIView):
 
     def dislike_video(self, request, pk):
         comment = self.get_by_id(pk)
-        serializer = CommentsSerializer(comment, data=request.data, partial=True)
+        serializer = CommentSerializer(comment, data=request.data, partial=True)
         if serializer.is_valid():
             comment.likes -= 1
             serializer.save()

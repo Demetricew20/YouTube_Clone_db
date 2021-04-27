@@ -1,9 +1,9 @@
 from django.db import models
 
 # Create your models here.
-class Comments(models.Model):
-    video = models.ForeignKey('youtube_clone.Video', default=0, on_delete=models.CASCADE)
-    comment = models.CharField(max_length=120)
-    comment_reply = models.ForeignKey('comments.Comments', max_length=120, default=None, blank=True, on_delete=models.CASCADE)
+class Comment(models.Model):
+    video = models.ForeignKey('youtube_clone.Video', default=None, on_delete=models.CASCADE)
+    comment_text = models.CharField(max_length=120)
+    original_comment = models.ForeignKey('comments.Comment', blank=True, null=True, on_delete=models.CASCADE)
     like = models.BooleanField(default=None, null=True, blank=True)
     dislike = models.BooleanField( default=None, null=True, blank=True)

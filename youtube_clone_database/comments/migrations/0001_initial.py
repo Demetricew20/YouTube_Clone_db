@@ -17,7 +17,7 @@ class Migration(migrations.Migration):
             name='Comments',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('comment', models.CharField(max_length=120)),
+                ('comments', models.CharField(max_length=120)),
                 ('like', models.BooleanField(blank=True, default=None, null=True)),
                 ('dislike', models.BooleanField(blank=True, default=None, null=True)),
                 ('video_id', models.ForeignKey(default=0, on_delete=django.db.models.deletion.CASCADE, to='youtube_clone.video')),

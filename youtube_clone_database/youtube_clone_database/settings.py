@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'youtube_clone.apps.YoutubeCloneConfig',
-    'comments.apps.CommentsConfig',
+    'comments.apps.CommentConfig',
     'corsheaders'
 ]
 
