@@ -23,20 +23,20 @@ class VideoList(APIView):
 
 class VideoDetail(APIView):
 
-    def get_by_id(self, pk):
+    def get_by_pk(self, pk):
         try:
             return Video.objects.get(pk=pk)
         except Video.DoesNotExist:
             raise status.HTTP_400_BAD_REQUEST
 
     def get(self, request, pk):
-        video = self.get_by_id(pk)
+        video = self.get_by_pk(pk)
         serializer = VideoSerializer(video)
         return Response(serializer.data)
 
 
     def put(self, request, pk):
-        video = self.get_by_id(pk)
+        video = self.get_by_pk(pk)
         serializer = VideoSerializer(video, data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -44,12 +44,12 @@ class VideoDetail(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, pk):
-        video = self.get_by_id(pk)
+        video = self.get_by_pk(pk)
         video.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
     def patch(self, request, pk):
-        video = self.get_by_id(pk)
+        video = self.get_by_pk(pk)
         serializer = VideoSerializer(video, data=request.data, partial=True)
         if serializer.is_valid():
             video.likes += 1
@@ -58,7 +58,7 @@ class VideoDetail(APIView):
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
     def dislike_video(self, request, pk):
-        video = self.get_by_id(pk)
+        video = self.get_by_pk(pk)
         serializer = VideoSerializer(video, data=request.data, partial=True)
         if serializer.is_valid():
             video.likes -= 1

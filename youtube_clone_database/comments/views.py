@@ -24,20 +24,20 @@ class CommentList(APIView):
 
 class CommentDetail(APIView):
 
-    def get_by_id(self, pk):
+    def get_by_pk(self, pk):
         try:
             return Comment.objects.get(pk=pk)
         except Comment.DoesNotExist:
             raise Http404
 
     def get(self, request, pk):
-        comment = self.get_by_id(pk)
+        comment = self.get_by_pk(pk)
         serializer = CommentSerializer(comment)
         return Response(serializer.data)
 
 
     def put(self, request, pk):
-        comment = self.get_by_id(pk)
+        comment = self.get_by_pk(pk)
         serializer = CommentSerializer(comment, data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -45,21 +45,21 @@ class CommentDetail(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, pk):
-        comment = self.get_by_id(pk)
+        comment = self.get_by_pk(pk)
         comment.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
     def patch(self, request, pk):
-        video = self.get_by_id(pk)
-        serializer = CommentSerializer(video, data=request.data, partial=True)
+        comment = self.get_by_pk(pk)
+        serializer = CommentSerializer(comment, data=request.data, partial=True)
         if serializer.is_valid():
-            video.likes += 1
+            comment.like = True
             serializer.save()
             return Response(status=status.HTTP_202_ACCEPTED),
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
     def dislike_video(self, request, pk):
-        comment = self.get_by_id(pk)
+        comment = self.get_by_pk(pk)
         serializer = CommentSerializer(comment, data=request.data, partial=True)
         if serializer.is_valid():
             comment.likes -= 1
