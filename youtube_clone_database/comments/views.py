@@ -53,16 +53,8 @@ class CommentDetail(APIView):
         comment = self.get_by_pk(pk)
         serializer = CommentSerializer(comment, data=request.data, partial=True)
         if serializer.is_valid():
-            comment.like = True
+            comment.like = 'true'
             serializer.save()
             return Response(status=status.HTTP_202_ACCEPTED),
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
-    def dislike_video(self, request, pk):
-        comment = self.get_by_pk(pk)
-        serializer = CommentSerializer(comment, data=request.data, partial=True)
-        if serializer.is_valid():
-            comment.likes -= 1
-            serializer.save()
-            return Response(status=status.HTTP_202_ACCEPTED)
-        return Response(status=status.HTTP_400_BAD_REQUEST)
