@@ -27,7 +27,8 @@ class VideoDetail(APIView):
         try:
             return Video.objects.get(pk=pk)
         except Video.DoesNotExist:
-            raise status.HTTP_400_BAD_REQUEST
+            video = Video(yt_video_id=pk)
+            video.save()
 
     def get(self, request, pk):
         video = self.get_by_pk(pk)
@@ -57,11 +58,3 @@ class VideoDetail(APIView):
             return Response(status=status.HTTP_202_ACCEPTED),
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
-    def dislike_video(self, request, pk):
-        video = self.get_by_pk(pk)
-        serializer = VideoSerializer(video, data=request.data, partial=True)
-        if serializer.is_valid():
-            video.likes -= 1
-            serializer.save()
-            return Response(status=status.HTTP_202_ACCEPTED)
-        return Response(status=status.HTTP_400_BAD_REQUEST)
